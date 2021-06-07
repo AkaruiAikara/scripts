@@ -16,8 +16,7 @@ echo -e;
 sendMessage "Starting build $FULL_ROM_NAME for $FULL_DEVICE_NAME"
 
 # Start Build
-#lunch $ROM\_$DEVICE-userdebug && mka bacon | tee build.log	# Enable this for standard "mka bacon"
-lunch $ROM\_$DEVICE-userdebug && make corvus | tee build.log	# Enable and edit this if ROM has specific "make command" (make corvus, mka aex, etc)
+lunch $ROM\_$DEVICE-userdebug && mka bacon -j10 | tee build.log	# Enable this for standard "mka bacon"
 # catch lunch error
 if [ $? -eq 0 ]
 then
