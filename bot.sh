@@ -2,6 +2,7 @@
 
 # Sync with configs
 source bot.conf
+source ccache.conf
 cd $HOME_DIR/$ROM_DIR
 source build/envsetup.sh
 
