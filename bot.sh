@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Sync with configs
-source bot-mega.conf
+source bot.conf
+cd $HOME_DIR/$ROM_DIR
 source build/envsetup.sh
 
 sendMessage() {
@@ -21,8 +22,8 @@ lunch $ROM\_$DEVICE-userdebug && make corvus | tee build.log	# Enable and edit t
 if [ $? -eq 0 ]
 then
 
-		echo "Build Completed! Uploading to MEGA.."
-		sendMessage "Build Completed! Uploading to MEGA.."
+		echo "Build Completed! Uploading to KontenaCloud.."
+		sendMessage "Build Completed! Uploading to KontenaCloud.."
 
 		# Grab full file output
 		FILE_OUTPUT=$(grep -Po 'Package Complete: \K[^ ]+' build.log)
@@ -31,25 +32,15 @@ then
 		ZIP_NAME=$(grep -Po 'Package Complete: \K[^ ]+' build.log | sed 's#.*/##')
 		echo $ZIP_NAME
 
-		# Create Dir according to $DEVICE & $ROM (disable this after successfully executing script for first time)
-		megadf --reload 2>&1 >/dev/null && megamkdir /Root/$DEVICE_DIR 2>&1 >/dev/null
-		megadf --reload 2>&1 >/dev/null && megamkdir /Root/$DEVICE_DIR/$ROM_DIR 2>&1 >/dev/null
-
-		# Upload to MEGA
-		megadf -h --reload
-		megaput --path /Root/$DEVICE_DIR/$ROM_DIR/ $FILE_OUTPUT
-
-		# Fetch URL
-		megals -e /Root/$DEVICE_DIR/$ROM_DIR/$ZIP_NAME >> url.log
-		URL=$(grep https url.log | awk '{ print $1 }')
+		# Upload to KontenaCloud via RClone
+                rclone copy $FILE_OUTPUT kontena:test/rom -P
+                URL=https://kontena.aikara.me/0:/test/rom/$ZIP_NAME
 		echo $URL
 
 else
 	sendMessage "Build Failed!"
 	echo "Build Failed!"
 fi
-
-rm url.log
 
 		# Some Extra Summary to share
 		MD5=`md5sum $FILE_OUTPUT | awk '{ print $1 }'`
@@ -61,7 +52,7 @@ $FULL_ROM_NAME $A_VERSION for $FULL_DEVICE_NAME
 Author: $TG_NAME
 Build Date: $BUILD_DATE
 Build Type: $BUILD_TYPE
-MEGA LINK: $URL
+LINK: $URL
 SIZE: $SIZE
 MD5: $MD5
 

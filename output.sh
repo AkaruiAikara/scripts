@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Sync with configs
-source bot-mega.conf
+source bot.conf
 
 read -r -d '' SUMMARY << EOM
 $FULL_ROM_NAME $A_VERSION for $FULL_DEVICE_NAME
@@ -9,7 +9,7 @@ $FULL_ROM_NAME $A_VERSION for $FULL_DEVICE_NAME
 Author: $TG_NAME
 Build Date: $BUILD_DATE
 Build Type: $BUILD_TYPE
-MEGA LINK: $URL
+LINK: $URL
 SIZE: $SIZE
 MD5: $MD5
 
